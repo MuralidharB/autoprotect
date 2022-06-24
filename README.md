@@ -14,6 +14,4 @@ optional arguments:
   ```
   
   # Autoprotect configuration file
-  The autoprotect.py requires a configuration file that includes information about the openstack cloud, users and their credentials. The complete listing is given here:
-  ```
-  ```
+  The autoprotect.py requires a configuration file that includes information about the openstack cloud, users and their credentials. A sample configuration file `autoprotect.rc` is checked in as part of the repo. To keep the parsing logic simple, we expect each line of the parameter is expected to start with a keywork `export`. Any lines that do not start with this keyword is ignored by the python code.
