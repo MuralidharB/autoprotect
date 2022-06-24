@@ -15,9 +15,6 @@ if [ -z "$OS_USER_DOMAIN_NAME" ]; then unset OS_USER_DOMAIN_NAME; fi
 export OS_PROJECT_DOMAIN_ID="08cce85b36c544a7a9e3554f4f50d4bc"
 if [ -z "$OS_PROJECT_DOMAIN_ID" ]; then unset OS_PROJECT_DOMAIN_ID; fi
 
-unset OS_TENANT_ID
-unset OS_TENANT_NAME
-
 # --os-username used to list domains, projects and vms in the cloud
 export OS_USERNAME="cloudadmin"
 
@@ -34,7 +31,7 @@ export OS_INTERFACE=internal
 export OS_IDENTITY_API_VERSION=3
 
 # --os-password password to use with cloud admin
-export OS_PASSWORD=Password1!
+export OS_PASSWORD=xxxxxxxxxxx
 
 # --os-domain-id is used for workloadmgr. 
 export OS_DOMAIN_ID=08cce85b36c544a7a9e3554f4f50d4bc
@@ -44,7 +41,7 @@ export OS_TENANT_ID=f294ac9f2aff4ca0b0201ad030ac604d
 # We expect each tenant as the following user and can be logged in with the same password.
 # We also expect the user will have the same role as the trustee role identified during
 # TVM configuration
-export OS_BACKUP_ADMIN_PASSWORD=Password1!
+export OS_BACKUP_ADMIN_PASSWORD=xxxxxxxxxxx
 export OS_BACKUP_ADMIN=backup-admin
 
 # How frequently the backup need to be scheduled. Increments of hr
