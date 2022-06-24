@@ -33,7 +33,8 @@ def parse_rc_file(rcfile):
                'snaps-to-retain': 'SNAPS_TO_RETAIN',
                'start-date': 'START_DATE',
                'start-time': 'START_TIME',
-               'log_file': 'log_file'} 
+               'log_file': 'log_file',
+               'vm_age': 'vm_age'} 
    
     mapping = {}
     for k, v in _mapping.items():
@@ -148,6 +149,7 @@ if __name__ == '__main__':
    logger.info("============================= Start of autoprotect.py script =====================")
 
    domains = list_domains(params)
+   vm_age = int( params.get('vm_age', 0))
    for d in domains:
        backup_admin_id = None
        users = list_users(params, d['ID'])
@@ -160,6 +162,9 @@ if __name__ == '__main__':
        for p in list_projects(params, d['ID']):
            for i in list_instances(params, p['ID']):
                vm = show_instance(params, i['ID'])
+               if datetime.datetime.now() - datetime.datetime.strptime(vm['created'], "%Y-%m-%dT%XZ") < datetime.timedelta(days=vm_age):
+                   logger.info("Skipping VM(%s) as it is created less than %d days" % (vm['name'], vm_age))
+                   continue
                if 'workload_id' in vm.get('properties'):
                    logger.info("VM(%s) is protected" % vm['name'])
                else:
