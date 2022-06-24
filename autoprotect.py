@@ -1,9 +1,16 @@
 import argparse
 import datetime
 import json
+import logging
 import sys
 
 from subprocess import check_output, call
+
+
+# create logger with 'autoprotect'
+logger = logging.getLogger('autoprotect')
+logger.setLevel(logging.DEBUG)
+
 
 def parse_rc_file(rcfile):
     params = {}
@@ -25,7 +32,8 @@ def parse_rc_file(rcfile):
                'job-interval': 'JOB_INTERVAL',
                'snaps-to-retain': 'SNAPS_TO_RETAIN',
                'start-date': 'START_DATE',
-               'start-time': 'START_TIME'} 
+               'start-time': 'START_TIME',
+               'log_file': 'log_file'} 
    
     mapping = {}
     for k, v in _mapping.items():
@@ -115,14 +123,29 @@ def create_workload(params, domainid, projectid, backupadmin, backupadmin_passwo
            vm['id'], params["job-interval"], params["snaps-to-retain"], start_date)
 
     out = check_output(cmd.split() + ["--jobschedule", "start_time='%s'" % start_time])
+    logger.info("Creating workload for VM %s(%s)" % ( vm['name'], vm['id']))
+    logger.info(out)
     return out
 
 
 if __name__ == '__main__':
+   # create file handler which logs even debug messages
    parser = argparse.ArgumentParser()
    parser.add_argument('rcfile', type=argparse.FileType('r'))
    args = parser.parse_args()
    params = parse_rc_file(args.rcfile)
+
+   log_file = params.get('log_file', 'autoprotect.py.log')
+   fh = logging.FileHandler(log_file)
+   fh.setLevel(logging.DEBUG)
+
+   # create formatter and add it to the handlers
+   formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+   fh.setFormatter(formatter)
+
+   # add the handlers to the logger
+   logger.addHandler(fh)
+   logger.info("============================= Start of autoprotect.py script =====================")
 
    domains = list_domains(params)
    for d in domains:
@@ -138,9 +161,10 @@ if __name__ == '__main__':
            for i in list_instances(params, p['ID']):
                vm = show_instance(params, i['ID'])
                if 'workload_id' in vm.get('properties'):
-                   print("VM(%s) is protected" % vm['name'])
+                   logger.info("VM(%s) is protected" % vm['name'])
                else:
-                   print("VM(%s) is NOT protected" % vm['name'])
-                   print(create_workload(params, d['ID'], p['ID'],
+                   logger.info("VM(%s) is NOT protected" % vm['name'])
+                   logger.info(create_workload(params, d['ID'], p['ID'],
                                          params["--os-backup-admin"],
                                          params["--os-backup-admin-password"], vm))
+   logger.info("============================= End of autoprotect.py script =====================")

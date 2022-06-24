@@ -1,0 +1,66 @@
+# --os-auth-url of the cloud
+export OS_AUTH_URL=http://10.10.10.249:5000/v3
+
+# --os-project-id of the user to list domains, projects and vms in the cloud
+export OS_PROJECT_ID=f294ac9f2aff4ca0b0201ad030ac604d
+
+# --os-project-name of the user to list domains, projects and vms in the cloud
+export OS_PROJECT_NAME="cloudproject"
+
+# --os-user-domain-name of the user to list domains, projects and vms in the cloud
+export OS_USER_DOMAIN_NAME="clouddomain"
+if [ -z "$OS_USER_DOMAIN_NAME" ]; then unset OS_USER_DOMAIN_NAME; fi
+
+# --os-project-domain-id of the user to list domains, projects and vms in the cloud
+export OS_PROJECT_DOMAIN_ID="08cce85b36c544a7a9e3554f4f50d4bc"
+if [ -z "$OS_PROJECT_DOMAIN_ID" ]; then unset OS_PROJECT_DOMAIN_ID; fi
+
+unset OS_TENANT_ID
+unset OS_TENANT_NAME
+
+# --os-username used to list domains, projects and vms in the cloud
+export OS_USERNAME="cloudadmin"
+
+# --os-region-name that the TVK installed
+export OS_REGION_NAME="USEAST"
+if [ -z "$OS_REGION_NAME" ]; then unset OS_REGION_NAME; fi
+
+# --os-interface identifies the endpoint type to use when communicating with
+# openstack api endpoints
+export OS_INTERFACE=internal
+
+# --os-identity-api-version which is keystone api version to use when authenticating to
+# keystone
+export OS_IDENTITY_API_VERSION=3
+
+# --os-password password to use with cloud admin
+export OS_PASSWORD=Password1!
+
+# --os-domain-id is used for workloadmgr. 
+export OS_DOMAIN_ID=08cce85b36c544a7a9e3554f4f50d4bc
+#export OS_TENANT_ID=ae34c09637bd447e8d1a8676f1dfdd5e
+export OS_TENANT_ID=f294ac9f2aff4ca0b0201ad030ac604d
+
+# We expect each tenant as the following user and can be logged in with the same password.
+# We also expect the user will have the same role as the trustee role identified during
+# TVM configuration
+export OS_BACKUP_ADMIN_PASSWORD=Password1!
+export OS_BACKUP_ADMIN=backup-admin
+
+# How frequently the backup need to be scheduled. Increments of hr
+export JOB_INTERVAL=24hr
+
+# How many backups to be retained
+export SNAPS_TO_RETAIN=30
+
+# Start date with respect to today.
+# 0 means the start is current date
+# 1 means start date is tomorrow
+export START_DATE=0
+
+# start time of each backup scheduled. Specified in 24 hr. Must include
+# minutes and seconds, thought we ignore seconds component
+export START_TIME="13:00:00"
+
+# Log file where autoprotect writes its logging
+export log_file=/tmp/autoprotect.py.log
